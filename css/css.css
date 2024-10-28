@@ -1,0 +1,78 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+section{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* box-shadow:  2px 4px 0 rgba(0,0,0,.2),0 25px 50px 0 rgba(0,0,0,.1) */
+}
+h1{
+    color: #66ccff;
+    font-size: 50px;
+    font-weight: 500;
+}
+header,main,footer{
+    min-width:500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+header{
+    flex-direction: column;
+}
+#todo{
+    text-align: center;
+    min-height: 50px;
+    min-width: inherit;
+    font-size: 24px;
+    border: none ;
+    border-radius: 10px;
+    outline: none;
+    background-color: transparent;
+    transition: box-sh .1s;
+    /* outline: #66ccff; */
+    /* box-shadow: 1 1 1 1; */
+    /* border-radius: 10%; */
+}
+#todo:focus{
+    box-shadow: 0 0 0 2px rgba(0, 174, 255, 0.5), /* 较淡的外边框 */
+                0 0 0 4px rgba(0, 153, 255, 0.2); /* 更淡的外边框 */
+}
+/* #submit{
+
+} */
+.task{
+    margin-top: 1px;
+    margin-bottom: 1px;
+    /* 暂时有元素塌陷等下搞 */
+    font-size: 24px;
+    min-height: 40px;
+    min-width: 500px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+#statuscontainer{
+    width:500px;
+    display: flex;
+    position: relative;;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+#tab{
+    position: absolute;
+    left :0;
+    visibility: hidden;
+}
+#status ul li{
+    margin-left: 5px;
+    margin-right: 5px;
+    display: inline;
+    
+}
