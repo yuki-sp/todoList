@@ -22,6 +22,7 @@ header,main,footer{
     align-items: center;
     justify-content: center;
 }
+
 header{
     flex-direction: column;
 }
@@ -35,17 +36,13 @@ header{
     outline: none;
     background-color: transparent;
     transition: box-sh .1s;
-    /* outline: #66ccff; */
-    /* box-shadow: 1 1 1 1; */
-    /* border-radius: 10%; */
+
 }
 #todo:focus{
-    box-shadow: 0 0 0 2px rgba(0, 174, 255, 0.5), /* 较淡的外边框 */
-                0 0 0 4px rgba(0, 153, 255, 0.2); /* 更淡的外边框 */
+    box-shadow: 0 0 0 2px rgba(0, 174, 255, 0.5),
+                0 0 0 4px rgba(0, 153, 255, 0.2);
 }
-/* #submit{
 
-} */
 .task{
     margin-top: 1px;
     margin-bottom: 1px;
@@ -58,6 +55,7 @@ header{
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
+    position: relative;
 }
 .check{
     display: inline-block;
@@ -89,6 +87,13 @@ header{
     transition: opacity 0.2s;
     transition: textDecoration 0.2s;
 }
+.cross{
+    position: absolute;
+    right:0;
+    cursor: pointer;
+    opacity: 0.5;
+}
+
 #statuscontainer{
     width:500px;
     display: flex;
@@ -107,4 +112,7 @@ header{
     margin-right: 5px;
     display: inline;
     
+}
+.delete{
+    display: none;
 }
