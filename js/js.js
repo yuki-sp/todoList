@@ -10,6 +10,7 @@ const insert = () => {
     if (task == "") return;
     const newtask = document.createElement("div");//新任务的大框框
     newtask.classList.add("task");
+    newtask.classList.add("visible"); // 添加visible
     
     const lable = document.createElement("label");//任务内容
     lable.innerHTML = task;
@@ -26,14 +27,16 @@ const insert = () => {
             lable.style.textDecoration = 'none'; // 去除删除线
             lable.style.opacity=1;
             target.count--;
-            newtask.classList.remove("invisible"); // 移除invisible
             newtask.classList.add("visible"); // 添加visible
+            newtask.classList.remove("invisible"); // 移除invisible
+            
         } else {
             lable.style.textDecoration = 'line-through'; // 添加删除线
             lable.style.opacity=0.5;
             target.count++;
-            newtask.classList.remove("visible"); // 移除visible
             newtask.classList.add("invisible"); // 添加invisible
+            newtask.classList.remove("visible"); // 移除visible
+            
         }
         
     }
