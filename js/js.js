@@ -1,8 +1,9 @@
 var task;
+const input = document.getElementById("todo");//input输入框
 const target = { count: 0, finishedcount: 0 };// 计数器
 let _count = target.count;
-let _finishedcount=target.finishedcount;
-const clear=document.getElementById("clear");//clear completed的相关实现
+let _finishedcount = target.finishedcount;
+const clear = document.getElementById("clear");//clear completed的相关实现
 Object.defineProperties(target, {
     count: {
         get: function () {
@@ -10,47 +11,49 @@ Object.defineProperties(target, {
         },
         // 利用对象对计数器监听，实现items left
         set: function (value) {
-            let i = 1;
+
             _count = value;
             // console.log(_count);
-            if (i) {
-                const tab = document.getElementById("tab");
-                tab.style.visibility = "visible";//开始看见多少task剩下
-                const num = document.getElementById("num");
-                num.innerHTML = _count;
-                const letter = document.getElementById("letter");
-                if (_count == 1) {
-                    letter.innerText = "item left";
-                } else {
-                    letter.innerText = "items left";
-                }
+
+            const tab = document.getElementById("tab");
+            tab.style.visibility = "visible";//开始看见多少task剩下
+            const num = document.getElementById("num");
+            num.innerHTML = _count;
+            const letter = document.getElementById("letter");
+            if (_count == 1) {
+                letter.innerText = "item left";
+            } else {
+                letter.innerText = "items left";
             }
+
 
         }
     },
-    finishedcount:{
-        get:function(){
+    finishedcount: {
+        get: function () {
             return _finishedcount;
         },
         // 监听已完成的任务，实现clear completed
-        set:function(value){
-            _finishedcount=value;
-            
-            if(_finishedcount>0){                
-                clear.style.visibility="visible";
-            }else{
-                clear.style.visibility="hidden";
+        set: function (value) {
+            _finishedcount = value;
+
+            if (_finishedcount > 0) {
+                clear.style.visibility = "visible";
+            } else {
+                clear.style.visibility = "hidden";
             }
         }
     }
 })
 const container1 = document.getElementById("content1");//用于存放带时间的任务
 const container2 = document.getElementById("content2");//不带时间的任务
-const input = document.getElementById("todo");
+
+
+
 
 //进行输入的函数处理
-const insert = () => {
-    task = input.value;
+const insert = (txt) => {
+    task = txt;
     if (task == "") return;
     const newtask = document.createElement("div");//新任务的大框框
     newtask.classList.add("task");
@@ -96,6 +99,8 @@ const insert = () => {
         newtask.remove();
         if (lable.style.textDecoration === 'none') {
             target.count--;
+        }else{
+            target.finishedcount--;
         }
     })
 
@@ -114,18 +119,33 @@ const insert = () => {
 }
 
 
+
+
+
+
+
+
+
 //停止输入（失去焦点）
 input.addEventListener("blur", function () {
-    insert();
+    insert(input.value);
 
 })
 //停止输入（按下enter）
 input.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
         event.preventDefault();
-        insert();
+        insert(input.value);
     }
 })
+
+
+
+
+
+
+
+
 
 
 //状态栏
@@ -163,14 +183,46 @@ completed.addEventListener("click", () => {
 
 
 //实现clear completed点击的效果
-clear.addEventListener("click",function(){
+clear.addEventListener("click", function () {
     console.log("yes");
-    const toBedelete=document.querySelectorAll(".invisible");
-    toBedelete.forEach(item=>{
+    const toBedelete = document.querySelectorAll(".invisible");
+    toBedelete.forEach(item => {
         item.remove();
-        _finishedcount--;
+        target.finishedcount--;
+        console.log(target.finishedcount);
     })
 })
 
 
 
+
+//封装class
+class todoList{
+    addTask(txt){
+      insert(txt);
+    }//添加任务
+
+    deleteTask(txt){
+        container2.querySelectorAll(".visible,.invisible").forEach(item=>{
+            const text = item.children[1].innerText;
+            console.log(text);
+            if(text==txt){
+                item.children[2].click();
+            }else{
+                alert('no such named task');
+            }
+        })
+    }//删除任务
+
+    completeTask(txt){
+        container2.querySelectorAll(".visible,.invisible").forEach(item=>{
+            const text = item.children[1].innerText;
+            console.log(text);
+            if(text==txt){
+                item.children[0].click();
+            }else{
+                alert('no such named task');
+            }
+        })
+    }//完成任务
+}
