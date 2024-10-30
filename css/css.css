@@ -2,6 +2,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    
 }
 section{
     text-align: center;
@@ -17,7 +18,7 @@ h1{
     font-weight: 500;
 }
 header,main,footer{
-    min-width:500px;
+    width:550px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -29,7 +30,7 @@ header{
 #todo{
     text-align: center;
     min-height: 70px;
-    min-width: inherit;
+    width:100%;
     font-size: 24px;
     border: none ;
     border-radius: 10px;
@@ -49,7 +50,7 @@ header{
     /* 不同元素间暂时有元素塌陷等下搞（其实没啥大问题（ */
     font-size: 24px;
     min-height: 80px;
-    min-width: 500px;
+    width: 550px;
     text-align: left;
     border-radius: 8px;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
@@ -87,30 +88,56 @@ header{
     transition: opacity 0.2s;
     transition: textDecoration 0.2s;
 }
+@media (hover:hover) {
+.cross{
+    visibility: hidden;
+}    
+.task:hover .cross{
+    visibility: visible;
+}
+#clear:hover{
+  text-decoration: underline;
+}
+#all:hover,#active:hover,#completed:hover{
+    box-shadow: 0 0 0 1px rgba(0, 174, 255, 0.5),
+                0 0 0 1px rgba(0, 153, 255, 0.2);
+    border-radius:2px ;
+}
+}
 .cross{
     position: absolute;
-    right:0;
+    right:5px;
     cursor: pointer;
     opacity: 0.5;
 }
 
+/* footer{
+    height:20px;
+} */
 #statuscontainer{
-    width:500px;
-    display: flex;
-    position: relative;;
+    width:550px;
+    position: relative;
+    height: 20px;
+    /* height: inherit; */
+    /* display: flex;
+
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: center; */
 }
 #tab{
     position: absolute;
     left :0;
+    top:0;
     visibility: hidden;
+}
+#status ul{
+    white-space: nowrap;
 }
 #status ul li{
     margin-left: 5px;
     margin-right: 5px;
-    display: inline;
+    display: inline! important;
     cursor: pointer;
 }
 .presentStatus{
@@ -124,4 +151,21 @@ header{
     top:0;
     visibility: hidden;
     cursor: pointer;
+}
+@media screen and (max-width: 550px) {
+    header,main,footer,#statuscontainer,.task,#content2{
+        width:100%
+    }
+}
+@media screen and (max-width: 450px){
+    #statuscontainer{
+        height:50px;
+    }
+    #ulli{
+        position: absolute;
+        left:50%;
+        transform: translateX(-50%);
+        bottom: 10px;
+    }
+
 }
