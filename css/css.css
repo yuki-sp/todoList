@@ -51,6 +51,7 @@ header{
     font-size: 24px;
     min-height: 80px;
     width: 550px;
+    max-width: 100%;
     text-align: left;
     border-radius: 8px;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
@@ -118,6 +119,7 @@ header{
     width:550px;
     position: relative;
     height: 20px;
+    max-width: 100%;
     /* height: inherit; */
     /* display: flex;
 
@@ -167,5 +169,13 @@ header{
         transform: translateX(-50%);
         bottom: 10px;
     }
-
+    h1{
+        font-size: 40px;
+    }
+    #todo {
+        font-size: 20px;
+    }
+    #statuscontainer {
+        font-size: 14px;
+    }
 }
