@@ -10,7 +10,6 @@ section{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* box-shadow:  2px 4px 0 rgba(0,0,0,.2),0 25px 50px 0 rgba(0,0,0,.1) */
 }
 h1{
     color: #66ccff;
@@ -23,6 +22,7 @@ header,main,footer{
     align-items: center;
     justify-content: center;
 }
+
 
 header{
     flex-direction: column;
@@ -43,6 +43,7 @@ header{
     box-shadow: 0 0 0 2px rgba(0, 174, 255, 0.5),
                 0 0 0 4px rgba(0, 153, 255, 0.2);
 }
+
 
 .task{
     margin-top: 1px;
@@ -89,6 +90,7 @@ header{
     transition: opacity 0.2s;
     transition: textDecoration 0.2s;
 }
+
 @media (hover:hover) {
 .cross{
     visibility: hidden;
@@ -112,20 +114,12 @@ header{
     opacity: 0.5;
 }
 
-/* footer{
-    height:20px;
-} */
+
 #statuscontainer{
     width:550px;
     position: relative;
     height: 20px;
     max-width: 100%;
-    /* height: inherit; */
-    /* display: flex;
-
-    flex-direction: row;
-    align-items: center;
-    justify-content: center; */
 }
 #tab{
     position: absolute;
@@ -154,6 +148,8 @@ header{
     visibility: hidden;
     cursor: pointer;
 }
+
+
 @media screen and (max-width: 550px) {
     header,main,footer,#statuscontainer,.task,#content2{
         width:100%

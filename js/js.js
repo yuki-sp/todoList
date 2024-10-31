@@ -1,4 +1,4 @@
-var task;
+let task;
 const input = document.getElementById("todo");//input输入框
 const target = { count: 0, finishedcount: 0 };// 计数器
 let _count = target.count;
@@ -52,7 +52,7 @@ const container2 = document.getElementById("content2");//不带时间的任务
 
 
 //进行输入的函数处理
-const insert = (txt) => {
+const insertTask = (txt) => {
     task = txt;
     if (task == "") return;
     const newtask = document.createElement("div");//新任务的大框框
@@ -128,14 +128,14 @@ const insert = (txt) => {
 
 //停止输入（失去焦点）
 input.addEventListener("blur", function () {
-    insert(input.value);
+    insertTask(input.value);
 
 })
 //停止输入（按下enter）
 input.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
         event.preventDefault();
-        insert(input.value);
+        insertTask(input.value);
     }
 })
 
@@ -199,30 +199,83 @@ clear.addEventListener("click", function () {
 //封装class
 class todoList{
     addTask(txt){
-      insert(txt);
+      insertTask(txt);
     }//添加任务
 
     deleteTask(txt){
+        let ensure=0;
         container2.querySelectorAll(".visible,.invisible").forEach(item=>{
             const text = item.children[1].innerText;
             console.log(text);
             if(text==txt){
                 item.children[2].click();
-            }else{
-                alert('no such named task');
+                ensure++;
+            }
+            if(ensure==0){
+                alert("no such named task")
             }
         })
+        if(ensure==0){
+            alert('no such named task');
+        }
     }//删除任务
 
     completeTask(txt){
+        let ensure=0;
         container2.querySelectorAll(".visible,.invisible").forEach(item=>{
             const text = item.children[1].innerText;
             console.log(text);
             if(text==txt){
                 item.children[0].click();
-            }else{
-                alert('no such named task');
+                ensure++;
+                console.log("win");
             }
         })
+        if(ensure==0){
+            alert('no such named task');
+        }
     }//完成任务
 }
+
+
+
+//储存数据
+window.addEventListener("beforeunload",()=>{
+    const storageArray=[];
+    const tasksToBeStorage=container2.querySelectorAll(".visible,.invisible");
+    tasksToBeStorage.forEach(workToBeStorage=>{
+        if(workToBeStorage.classList.contains('visible')){
+            storageArray.unshift([workToBeStorage.children[1].innerText,0]);//1表示已完成
+            // alert("yes");
+        }else{
+            storageArray.unshift([workToBeStorage.children[1].innerText,1]);//0表示未完成
+        }
+    })
+    localStorage.setItem('storageArray', JSON.stringify(storageArray));
+    localStorage.setItem("theCountStorage",JSON.stringify(target));
+})
+
+
+//读取数据
+const todolist=new todoList;
+const getStorage=localStorage.getItem("storageArray");
+if(getStorage){
+    var taskArrayToRender = JSON.parse(getStorage);
+    console.log(taskArrayToRender);
+    // console.log(taskArrayToRender[0]);
+    // console.log(taskArrayToRender[0][0]);
+    taskArrayToRender.forEach(tasks=>{
+        // console.log(tasks);
+        todolist.addTask(tasks[0]);
+        // if(tasks[1]){
+        //     todolist.completeTask(tasks[0]);
+        // }
+        if(tasks[1]==1){
+            // console.log("yes");
+            todolist.completeTask(tasks[0]);
+        }
+    })
+}else{
+    console.log("failed to load storage");
+}
+const getCount=localStorage.getItem("theCountStorage");
