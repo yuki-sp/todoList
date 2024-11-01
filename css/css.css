@@ -44,7 +44,10 @@ header{
                 0 0 0 4px rgba(0, 153, 255, 0.2);
 }
 
-
+main{
+    display: flex;
+    flex-direction: column;
+}
 .task{
     margin-top: 1px;
     margin-bottom: 1px;

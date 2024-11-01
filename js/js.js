@@ -1,6 +1,7 @@
 let task;
 const input = document.getElementById("todo");//input输入框
 const target = { count: 0, finishedcount: 0 };// 计数器
+const tasksbox=document.getElementById("mainbox");
 let _count = target.count;
 let _finishedcount = target.finishedcount;
 const clear = document.getElementById("clear");//clear completed的相关实现
@@ -46,6 +47,7 @@ Object.defineProperties(target, {
     }
 })
 const container1 = document.getElementById("content1");//用于存放带时间的任务
+const sortArray=[];//用于正则表达式的排序
 const container2 = document.getElementById("content2");//不带时间的任务
 
 
@@ -108,11 +110,28 @@ const insertTask = (txt) => {
     newtask.appendChild(lable);
     newtask.appendChild(cross);
 
+    //正则匹配
+    const timeRegex=/(?:[0-9]|0[0-9]|1[0-9]|2[0-3])[: ：][0-5][0-9]/;
+    const matchResult=lable.innerText.match(timeRegex);
+    if(matchResult){
+        console.log("match");
+        let specificTime=convert(matchResult[0]);
+        if(specificTime){console.log("matchwin");newtask.dataset.ddl=specificTime;}
+        if (container1.firstChild) {
+            // container1.insertBefore(newtask, container1.firstChild);
+            // const sort=
+            // container1.children.forEach(childTask=>{
+               
+            // })
+        } else {
+            container1.appendChild(newtask);
+        }
+    }else{
     if (container2.firstChild) {
         container2.insertBefore(newtask, container2.firstChild);
     } else {
         container2.appendChild(newtask);
-    }
+    }}
     input.value = "";
     target.count++;
     // console.log(target.count);
@@ -204,7 +223,7 @@ class todoList{
 
     deleteTask(txt){
         let ensure=0;
-        container2.querySelectorAll(".visible,.invisible").forEach(item=>{
+        tasksbox.querySelectorAll(".visible,.invisible").forEach(item=>{
             const text = item.children[1].innerText;
             console.log(text);
             if(text==txt){
@@ -222,7 +241,7 @@ class todoList{
 
     completeTask(txt){
         let ensure=0;
-        container2.querySelectorAll(".visible,.invisible").forEach(item=>{
+        tasksbox.querySelectorAll(".visible,.invisible").forEach(item=>{
             const text = item.children[1].innerText;
             console.log(text);
             if(text==txt){
@@ -242,7 +261,7 @@ class todoList{
 //储存数据
 window.addEventListener("beforeunload",()=>{
     const storageArray=[];
-    const tasksToBeStorage=container2.querySelectorAll(".visible,.invisible");
+    const tasksToBeStorage=document.querySelectorAll(".visible,.invisible");
     tasksToBeStorage.forEach(workToBeStorage=>{
         if(workToBeStorage.classList.contains('visible')){
             storageArray.unshift([workToBeStorage.children[1].innerText,0]);//1表示已完成
@@ -279,3 +298,10 @@ if(getStorage){
     console.log("failed to load storage");
 }
 const getCount=localStorage.getItem("theCountStorage");
+
+//熬测时的时间转换函数，照例放最后（
+function convert(timestamp) {
+    const matchColon=timestamp.match(/[: ：]/);
+    const [minutes, seconds] = timestamp.split(matchColon[0]).map(Number);
+    return minutes * 60 + seconds;
+}
