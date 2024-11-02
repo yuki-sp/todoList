@@ -113,28 +113,41 @@ const insertTask = (txt) => {
     //正则匹配
     const timeRegex=/(?:[0-9]|0[0-9]|1[0-9]|2[0-3])[: ：][0-5][0-9]/;
     const matchResult=lable.innerText.match(timeRegex);
-    if(matchResult){
-        console.log("match");
-        let specificTime=convert(matchResult[0]);
-        if(specificTime){console.log("matchwin");newtask.dataset.ddl=specificTime;}
-        if (container1.firstChild) {
-            // container1.insertBefore(newtask, container1.firstChild);
-            // const sort=
-            // container1.children.forEach(childTask=>{
-               
-            // })
-        } else {
-            container1.appendChild(newtask);
+// Insert task with automatic sorting based on time
+if (matchResult) {
+    let specificTime = convert(matchResult[0]);
+    if (specificTime) {
+        newtask.dataset.ddl = specificTime;
+    }
+
+    let inserted = false; // Flag to check if insertion is successful
+    const autoSort = Array.from(container1.querySelectorAll(".task")); // Gather current tasks
+    
+    for (let sortedTask of autoSort) {
+        if (specificTime < Number(sortedTask.dataset.ddl)) {
+            container1.insertBefore(newtask, sortedTask);
+            inserted = true;
+            break; // Exit once inserted
         }
-    }else{
+    }
+
+    if (!inserted) {
+        // Append if no earlier task found
+        container1.appendChild(newtask);
+    }
+}else{
     if (container2.firstChild) {
         container2.insertBefore(newtask, container2.firstChild);
     } else {
         container2.appendChild(newtask);
-    }}
+    }
+ 
+}
     input.value = "";
     target.count++;
     // console.log(target.count);
+
+    
 }
 
 
@@ -305,3 +318,59 @@ function convert(timestamp) {
     const [minutes, seconds] = timestamp.split(matchColon[0]).map(Number);
     return minutes * 60 + seconds;
 }
+
+
+
+// 初始化 container2 任务的拖动功能
+const initializeDragAndDrop = () => {
+    const tasks = container2.querySelectorAll('.task:not([data-dragged])');
+    tasks.forEach(task => {
+        task.setAttribute('draggable', true);
+        task.setAttribute('data-dragged', 'true'); // 标记任务已绑定事件
+
+        task.addEventListener('dragstart', (event) => {
+            event.dataTransfer.setData('text/plain', task.dataset.id);
+            task.classList.add('dragging');
+        });
+
+        task.addEventListener('dragend', () => {
+            task.classList.remove('dragging');
+        });
+    });
+
+    container2.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        const draggingTask = container2.querySelector('.dragging');
+        const closestTask = getClosestTask(container2, event.clientY);
+
+        if (closestTask && closestTask !== draggingTask) {
+            if (event.clientY < closestTask.getBoundingClientRect().top) {
+                container2.insertBefore(draggingTask, closestTask);
+            } else {
+                container2.insertBefore(draggingTask, closestTask.nextSibling);
+            }
+        }
+    });
+
+    container2.addEventListener('drop', (event) => {
+        event.preventDefault();
+    });
+};
+
+
+// 获取离当前鼠标位置最近的任务
+function getClosestTask(container, mouseY) {
+    const tasks = [...container.querySelectorAll('.task:not(.dragging)')];
+    return tasks.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = mouseY - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+// 在页面加载时初始化拖动排序功能
+initializeDragAndDrop();
