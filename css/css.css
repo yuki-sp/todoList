@@ -154,7 +154,7 @@ main{
 
 
 @media screen and (max-width: 550px) {
-    header,main,footer,#statuscontainer,.task,#content2{
+    header,main,footer,#statuscontainer,.task,#content1,#content2{
         width:100%
     }
 }
