@@ -56,43 +56,43 @@ const container2 = document.getElementById("content2");//不带时间的任务
 //进行输入的函数处理
 const insertTask = (txt) => {
     task = txt;
-    if (task == "") return;
-    const newtask = document.createElement("div");//新任务的大框框
-    newtask.classList.add("task");
-    newtask.classList.add("visible"); // 添加visible
+    if (task === "") return;
+
+    const newtask = document.createElement("div");
+    newtask.classList.add("task", "visible");
 
     const lable = document.createElement("label");//任务内容
     lable.innerHTML = task;
     lable.style.textDecoration = 'none';
     lable.classList.add("lablespan");
 
-    const taskcheck = document.createElement("div");//圆形勾选框
+    // 圆形勾选框
+    const taskcheck = document.createElement("div");
     taskcheck.classList.add("check");
-    const tick = document.createElement("div");//钩
+
+    const tick = document.createElement("div");
     tick.classList.add("tick");
     taskcheck.appendChild(tick);
+
+    // 完成任务的点击事件
     taskcheck.addEventListener("click", function () {
         this.classList.toggle("checked");
         if (lable.style.textDecoration === 'line-through') {
-            lable.style.textDecoration = 'none'; // 去除删除线
+            lable.style.textDecoration = 'none';
             lable.style.opacity = 1;
             target.count++;
             target.finishedcount--;
-            newtask.classList.add("visible"); // 添加visible
-            newtask.classList.remove("invisible"); // 移除invisible
-
+            newtask.classList.add("visible");
+            newtask.classList.remove("invisible");
         } else {
-            lable.style.textDecoration = 'line-through'; // 添加删除线
+            lable.style.textDecoration = 'line-through';
             lable.style.opacity = 0.5;
             target.count--;
             target.finishedcount++;
-            newtask.classList.add("invisible"); // 添加invisible
-            newtask.classList.remove("visible"); // 移除visible
-
+            newtask.classList.add("invisible");
+            newtask.classList.remove("visible");
         }
-
-    }
-    )
+    });
 
     const cross = document.createElement("span");//叉叉
     cross.classList.add("cross");
@@ -101,54 +101,73 @@ const insertTask = (txt) => {
         newtask.remove();
         if (lable.style.textDecoration === 'none') {
             target.count--;
-        }else{
+        } else {
             target.finishedcount--;
         }
-    })
+    });
 
     newtask.appendChild(taskcheck);
     newtask.appendChild(lable);
     newtask.appendChild(cross);
 
-    //正则匹配
-    const timeRegex=/(?:[0-9]|0[0-9]|1[0-9]|2[0-3])[: ：][0-5][0-9]/;
-    const matchResult=lable.innerText.match(timeRegex);
-// Insert task with automatic sorting based on time
-if (matchResult) {
-    let specificTime = convert(matchResult[0]);
-    if (specificTime) {
-        newtask.dataset.ddl = specificTime;
-    }
+    // 插入任务至 container1 或 container2
+    const timeRegex = /(?:[0-9]|0[0-9]|1[0-9]|2[0-3])[: ：][0-5][0-9]/;
+    const matchResult = lable.innerText.match(timeRegex);
+    if (matchResult) {
+        let specificTime = convert(matchResult[0]);
+        if (specificTime) {
+            newtask.dataset.ddl = specificTime;
+        }
 
-    let inserted = false; // Flag to check if insertion is successful
-    const autoSort = Array.from(container1.querySelectorAll(".task")); // Gather current tasks
-    
-    for (let sortedTask of autoSort) {
-        if (specificTime < Number(sortedTask.dataset.ddl)) {
-            container1.insertBefore(newtask, sortedTask);
-            inserted = true;
-            break; // Exit once inserted
+        let inserted = false;
+        const autoSort = Array.from(container1.querySelectorAll(".task"));
+        for (let sortedTask of autoSort) {
+            if (specificTime < Number(sortedTask.dataset.ddl)) {
+                container1.insertBefore(newtask, sortedTask);
+                inserted = true;
+                break;
+            }
+        }
+        if (!inserted) {
+            container1.appendChild(newtask);
+        }
+    } else {
+        if (container2.firstChild) {
+            container2.insertBefore(newtask, container2.firstChild);
+        } else {
+            container2.appendChild(newtask);
         }
     }
 
-    if (!inserted) {
-        // Append if no earlier task found
-        container1.appendChild(newtask);
-    }
-}else{
-    if (container2.firstChild) {
-        container2.insertBefore(newtask, container2.firstChild);
-    } else {
-        container2.appendChild(newtask);
-    }
- 
-}
+    // 添加拖动事件
+    newtask.setAttribute('draggable', true);
+    newtask.addEventListener('dragstart', (event) => {
+        event.dataTransfer.setData('text/plain', null);
+        newtask.classList.add('dragging');
+    });
+
+    newtask.addEventListener('dragend', () => {
+        newtask.classList.remove('dragging');
+    });
+
+    container2.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        const draggingTask = container2.querySelector('.dragging');
+        const closestTask = getClosestTask(container2, event.clientY);
+
+        if (closestTask && closestTask !== draggingTask) {
+            if (event.clientY < closestTask.getBoundingClientRect().top) {
+                container2.insertBefore(draggingTask, closestTask);
+            } else {
+                container2.insertBefore(draggingTask, closestTask.nextSibling);
+            }
+        }
+    });
+
     input.value = "";
     target.count++;
-    // console.log(target.count);
+};
 
-    
-}
 
 
 
