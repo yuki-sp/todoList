@@ -257,7 +257,7 @@ class todoList{
         let ensure=0;
         tasksbox.querySelectorAll(".visible,.invisible").forEach(item=>{
             const text = item.children[1].innerText;
-            console.log(text);
+            // console.log(text);
             if(text==txt){
                 item.children[2].click();
                 ensure++;
@@ -275,11 +275,11 @@ class todoList{
         let ensure=0;
         tasksbox.querySelectorAll(".visible,.invisible").forEach(item=>{
             const text = item.children[1].innerText;
-            console.log(text);
+            // console.log(text);
             if(text==txt){
                 item.children[0].click();
                 ensure++;
-                console.log("win");
+                // console.log("win");
             }
         })
         if(ensure==0){
@@ -311,7 +311,7 @@ window.addEventListener("beforeunload",()=>{
 const todolist=new todoList;
 const getStorage=localStorage.getItem("storageArray");
 if(getStorage){
-    var taskArrayToRender = JSON.parse(getStorage);
+    let taskArrayToRender = JSON.parse(getStorage);
     console.log(taskArrayToRender);
     // console.log(taskArrayToRender[0]);
     // console.log(taskArrayToRender[0][0]);
@@ -340,41 +340,7 @@ function convert(timestamp) {
 
 
 
-// 初始化 container2 任务的拖动功能
-const initializeDragAndDrop = () => {
-    const tasks = container2.querySelectorAll('.task:not([data-dragged])');
-    tasks.forEach(task => {
-        task.setAttribute('draggable', true);
-        task.setAttribute('data-dragged', 'true'); // 标记任务已绑定事件
 
-        task.addEventListener('dragstart', (event) => {
-            event.dataTransfer.setData('text/plain', task.dataset.id);
-            task.classList.add('dragging');
-        });
-
-        task.addEventListener('dragend', () => {
-            task.classList.remove('dragging');
-        });
-    });
-
-    container2.addEventListener('dragover', (event) => {
-        event.preventDefault();
-        const draggingTask = container2.querySelector('.dragging');
-        const closestTask = getClosestTask(container2, event.clientY);
-
-        if (closestTask && closestTask !== draggingTask) {
-            if (event.clientY < closestTask.getBoundingClientRect().top) {
-                container2.insertBefore(draggingTask, closestTask);
-            } else {
-                container2.insertBefore(draggingTask, closestTask.nextSibling);
-            }
-        }
-    });
-
-    container2.addEventListener('drop', (event) => {
-        event.preventDefault();
-    });
-};
 
 
 // 获取离当前鼠标位置最近的任务
@@ -391,5 +357,3 @@ function getClosestTask(container, mouseY) {
     }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
-// 在页面加载时初始化拖动排序功能
-initializeDragAndDrop();
